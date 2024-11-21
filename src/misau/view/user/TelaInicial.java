@@ -14,6 +14,9 @@ import com.formdev.flatlaf.ui.FlatBorder;
 import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.jhlabs.image.FlareFilter;
 import com.pedro.clock.Clock;
+import dao.ConsultaDAO;
+import dao.HospitalDAO;
+import dao.HospitalFuncionarioDAO;
 import dynamic_subjtable.Header;
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -28,7 +31,12 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.BorderLayout;
 import java.awt.Insets;
+import java.sql.SQLException;
+import java.util.List;
 import javax.swing.border.Border;
+import misau.model.Consulta;
+import misau.model.Hospital;
+import misau.model.HospitalFunconario;
 
 /**
  *
@@ -43,17 +51,46 @@ public class TelaInicial extends javax.swing.JFrame {
       
       
       
+      Hospital hosp;
       Insets insets = new Insets(1, 1, 1, 1);
-      
       Border b = new FlatLineBorder(insets, new Color(78, 170, 82), 2, 11);
+      HospitalFunconario f;
       
-      
-      
-    public TelaInicial() {
+ 
+    public TelaInicial(HospitalFunconario f) throws SQLException, ClassNotFoundException {
+        
         initComponents();
          btMassage.setBackground(new Color(0,0,0));
                     btNoti.setBackground(new Color(0,0,0));
-                   
+           this.f =  f;    
+           HospitalDAO aO = new HospitalDAO();
+          List<Hospital> readAll = aO.readAll();
+          
+          for (Hospital v : readAll) {
+            if(v.getId()==f.getHospitalId()){
+            this.hosp = v;
+            }
+        }
+           hospital.setText(hosp.getNome());
+           
+           ConsultaDAO dAO = new ConsultaDAO();
+          List<Consulta> readAll1 = dAO.readAll();
+          total.setText(String.valueOf(dAO.readAll().size()));
+          int count = 0;
+          int count2 = 0;
+          for (Consulta c : readAll1) {
+            if(c.getDataMarcacao()==null){
+            count++;
+             if(c.getDataMarcacao()!=null&&c.getStatusConsulta().equalsIgnoreCase("Concluida")){
+            count2++;
+            }
+                    
+        }}
+          
+          
+          pedidos.setText(String.valueOf(count));
+          pendente.setText(String.valueOf(count));
+          
     }
 
     /**
@@ -73,6 +110,7 @@ public class TelaInicial extends javax.swing.JFrame {
         bt4 = new javax.swing.JButton();
         bt7 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        bt8 = new javax.swing.JButton();
         BArraDeTitulo = new javax.swing.JPanel();
         btMassage = new com.pedro.swing.win_button.ButtonBadges();
         btNoti = new com.pedro.swing.win_button.ButtonBadges();
@@ -82,18 +120,19 @@ public class TelaInicial extends javax.swing.JFrame {
         p = new javax.swing.JPanel();
         p1 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        pendente = new javax.swing.JLabel();
         p3 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        total = new javax.swing.JLabel();
         p2 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
+        pedidos = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
+        hospital = new javax.swing.JLabel();
 
         jButton1.setFont(new java.awt.Font("Roboto Medium", 1, 48)); // NOI18N
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dashboard/icon/chart-simple-horizontal.png"))); // NOI18N
@@ -150,6 +189,13 @@ public class TelaInicial extends javax.swing.JFrame {
             }
         });
 
+        bt8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dashboard/icon/hand-horns.png"))); // NOI18N
+        bt8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt8ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -162,13 +208,16 @@ public class TelaInicial extends javax.swing.JFrame {
                     .addComponent(bt1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(bt3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(bt7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bt8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(14, Short.MAX_VALUE)
+                .addComponent(bt8, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(bt1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -180,7 +229,7 @@ public class TelaInicial extends javax.swing.JFrame {
                 .addComponent(bt4, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(bt7, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(117, Short.MAX_VALUE))
+                .addGap(52, 52, 52))
         );
 
         btMassage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dashboard/icon/message.png"))); // NOI18N
@@ -213,8 +262,8 @@ public class TelaInicial extends javax.swing.JFrame {
         BArraDeTituloLayout.setHorizontalGroup(
             BArraDeTituloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BArraDeTituloLayout.createSequentialGroup()
-                .addGap(61, 61, 61)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(escuro)
                 .addGap(180, 180, 180)
@@ -245,22 +294,22 @@ public class TelaInicial extends javax.swing.JFrame {
         jLabel10.setText("Numero De Conusltas Pendetes");
         p1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 220, 37));
 
-        jLabel11.setFont(new java.awt.Font("Roboto Medium", 0, 36)); // NOI18N
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("0");
-        jLabel11.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        p1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 220, 50));
+        pendente.setFont(new java.awt.Font("Roboto Medium", 0, 36)); // NOI18N
+        pendente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        pendente.setText("0");
+        pendente.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        p1.add(pendente, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 220, 50));
 
         p.add(p1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 250, 110));
 
         p3.setBorder(b);
 
         jLabel12.setFont(new java.awt.Font("Roboto Medium", 0, 14)); // NOI18N
-        jLabel12.setText("Numero de Consultas Para Hoje");
+        jLabel12.setText("Total de consultas");
 
-        jLabel13.setFont(new java.awt.Font("Roboto Medium", 0, 36)); // NOI18N
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setText("0");
+        total.setFont(new java.awt.Font("Roboto Medium", 0, 36)); // NOI18N
+        total.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total.setText("0");
 
         javax.swing.GroupLayout p3Layout = new javax.swing.GroupLayout(p3);
         p3.setLayout(p3Layout);
@@ -270,7 +319,7 @@ public class TelaInicial extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
                 .addContainerGap())
-            .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(total, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         p3Layout.setVerticalGroup(
             p3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -278,7 +327,7 @@ public class TelaInicial extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(total, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(16, 16, 16))
         );
 
@@ -289,10 +338,10 @@ public class TelaInicial extends javax.swing.JFrame {
         jLabel14.setFont(new java.awt.Font("Roboto Medium", 0, 14)); // NOI18N
         jLabel14.setText("Numero de Pedidos de Consultas");
 
-        jLabel15.setFont(new java.awt.Font("Roboto Medium", 0, 36)); // NOI18N
-        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel15.setText("0");
-        jLabel15.setToolTipText("");
+        pedidos.setFont(new java.awt.Font("Roboto Medium", 0, 36)); // NOI18N
+        pedidos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        pedidos.setText("0");
+        pedidos.setToolTipText("");
 
         javax.swing.GroupLayout p2Layout = new javax.swing.GroupLayout(p2);
         p2.setLayout(p2Layout);
@@ -300,10 +349,9 @@ public class TelaInicial extends javax.swing.JFrame {
             p2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(p2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(p2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
-                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(pedidos, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
                 .addContainerGap())
+            .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
         );
         p2Layout.setVerticalGroup(
             p2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -311,24 +359,29 @@ public class TelaInicial extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pedidos, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        p.add(p2, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 70, 240, 110));
+        p.add(p2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 70, 240, 110));
 
-        jButton3.setText("Acao 2");
+        jButton3.setText("Adicionar Paciente");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Acao 4");
+        jButton4.setText("Adicionar Servicos");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
-        jButton5.setText("Acao 5");
+        jButton5.setText("Configuracoes");
 
-        jButton6.setText("Acao 1");
+        jButton6.setText("Gestao de Consultas");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -337,42 +390,52 @@ public class TelaInicial extends javax.swing.JFrame {
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dashboard/icon/user.png"))); // NOI18N
 
+        hospital.setFont(new java.awt.Font("Roboto Medium", 0, 24)); // NOI18N
+        hospital.setText("Hospital ");
+
         javax.swing.GroupLayout contentLayout = new javax.swing.GroupLayout(content);
         content.setLayout(contentLayout);
         contentLayout.setHorizontalGroup(
             contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(p, javax.swing.GroupLayout.DEFAULT_SIZE, 941, Short.MAX_VALUE)
-            .addGroup(contentLayout.createSequentialGroup()
-                .addGap(27, 27, 27)
+            .addComponent(p, javax.swing.GroupLayout.DEFAULT_SIZE, 999, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contentLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
                 .addComponent(jLabel6)
-                .addGap(103, 103, 103)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(hospital, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(contentLayout.createSequentialGroup()
+                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(21, 21, 21))
         );
+
+        contentLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton3, jButton4, jButton5, jButton6});
+
         contentLayout.setVerticalGroup(
             contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contentLayout.createSequentialGroup()
-                .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(contentLayout.createSequentialGroup()
-                        .addGap(148, 148, 148)
-                        .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(contentLayout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(40, 40, 40)
+                .addGap(17, 17, 17)
+                .addComponent(hospital, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
+                .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(38, 38, 38)
                 .addComponent(p, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
+
+        contentLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton3, jButton4, jButton5, jButton6});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -394,10 +457,11 @@ public class TelaInicial extends javax.swing.JFrame {
                 .addComponent(BArraDeTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 79, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)))
                 .addContainerGap())
         );
 
@@ -592,12 +656,74 @@ Border b1 = new FlatLineBorder(insets,  Color.decode("#B92303"), 2, 11);
     }//GEN-LAST:event_btMassageActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+        Listarconsultas   p1;
+          try {
+              p1 = new Listarconsultas(b);
+               p1.setSize(1011, 494);
+         p1.setLocation(0,0);
+          content.setLayout(new BorderLayout());
+               content.removeAll();
+                content.add(p1, BorderLayout.CENTER );
+              content.revalidate();
+              content.repaint();
+          } catch (SQLException ex) {
+              Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
+          } catch (ClassNotFoundException ex) {
+              Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
+          }
+  
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        AdicionarUtente   p1;
+          try {
+              p1 = new AdicionarUtente();
+               p1.setSize(1011, 494);
+        p1.setLocation(0,0);
+        content.setLayout(new BorderLayout());
+        content.removeAll();
+        content.add(p1, BorderLayout.CENTER );
+        content.revalidate();
+        content.repaint();
+          } catch (SQLException ex) {
+              Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
+          } catch (ClassNotFoundException ex) {
+              Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
+          }
+       
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+   AddService   p1;
+   p1 = new AddService(hosp.getId());
+   p1.setSize(1011, 494);
+   p1.setLocation(0,0);
+   content.setLayout(new BorderLayout());
+   content.removeAll();
+   content.add(p1, BorderLayout.CENTER );
+   content.revalidate();
+   content.repaint();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void bt8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt8ActionPerformed
+        Home   p1;
+        
+          try {
+              p1 = new Home(hosp);
+               p1.setSize(1011, 494);
+   p1.setLocation(0,0);
+   content.setLayout(new BorderLayout());
+   content.removeAll();
+   content.add(p1, BorderLayout.CENTER );
+   content.revalidate();
+   content.repaint();
+          } catch (SQLException ex) {
+              Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
+          } catch (ClassNotFoundException ex) {
+              Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
+          }
+  
+    }//GEN-LAST:event_bt8ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -613,7 +739,7 @@ Border b1 = new FlatLineBorder(insets,  Color.decode("#B92303"), 2, 11);
        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TelaInicial().setVisible(true);
+//                new TelaInicial().setVisible(true);
             }
         });
     }
@@ -624,11 +750,13 @@ Border b1 = new FlatLineBorder(insets,  Color.decode("#B92303"), 2, 11);
     private javax.swing.JButton bt3;
     private javax.swing.JButton bt4;
     private javax.swing.JButton bt7;
+    private javax.swing.JButton bt8;
     private javax.swing.JButton btListar;
     private com.pedro.swing.win_button.ButtonBadges btMassage;
     private com.pedro.swing.win_button.ButtonBadges btNoti;
     private javax.swing.JPanel content;
     private javax.swing.JRadioButton escuro;
+    private javax.swing.JLabel hospital;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -636,11 +764,8 @@ Border b1 = new FlatLineBorder(insets,  Color.decode("#B92303"), 2, 11);
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -648,5 +773,8 @@ Border b1 = new FlatLineBorder(insets,  Color.decode("#B92303"), 2, 11);
     private javax.swing.JPanel p1;
     private javax.swing.JPanel p2;
     private javax.swing.JPanel p3;
+    private javax.swing.JLabel pedidos;
+    private javax.swing.JLabel pendente;
+    private javax.swing.JLabel total;
     // End of variables declaration//GEN-END:variables
 }

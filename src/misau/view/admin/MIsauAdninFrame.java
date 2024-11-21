@@ -11,9 +11,11 @@ import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubDarkIJTh
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.ui.FlatLineBorder;
+import dao.HospitalDAO;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Insets;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -36,11 +38,12 @@ public class MIsauAdninFrame extends javax.swing.JFrame {
       Insets insets = new Insets(1, 1, 1, 1);
       
       Border b = new FlatLineBorder(insets, new Color(78, 170, 82), 2, 11);
-    public MIsauAdninFrame() {
+    public MIsauAdninFrame() throws SQLException, ClassNotFoundException {
         initComponents();
         Messagem.setBackground(new Color(0,0,0));
                     noti.setBackground(new Color(0,0,0));
-                   
+                   HospitalDAO dd = new HospitalDAO();
+                   numero.setText(String.valueOf(dd.readAll().size()));
          GlassPanePopup.install(this);
     }
 
@@ -57,7 +60,7 @@ public class MIsauAdninFrame extends javax.swing.JFrame {
         p = new javax.swing.JPanel();
         p1 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        numero = new javax.swing.JLabel();
         p3 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
@@ -86,11 +89,11 @@ public class MIsauAdninFrame extends javax.swing.JFrame {
         jLabel10.setText("Numero De Hospitais Inscritos");
         p1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 220, 37));
 
-        jLabel11.setFont(new java.awt.Font("Roboto Medium", 0, 36)); // NOI18N
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("0");
-        jLabel11.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        p1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 220, 50));
+        numero.setFont(new java.awt.Font("Roboto Medium", 0, 36)); // NOI18N
+        numero.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        numero.setText("0");
+        numero.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        p1.add(numero, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 220, 50));
 
         p.add(p1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 250, 110));
 
@@ -237,17 +240,15 @@ public class MIsauAdninFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
-                        .addGap(43, 43, 43))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel4)
-                        .addGap(18, 18, 18))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel4))
+                        .addGap(18, 18, 18)))
                 .addComponent(contente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
@@ -265,18 +266,16 @@ public class MIsauAdninFrame extends javax.swing.JFrame {
                     .addComponent(jToggleButton4)
                     .addComponent(noti, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Messagem, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 2, Short.MAX_VALUE)
-                        .addComponent(contente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(4, 4, 4)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(contente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         pack();
@@ -346,7 +345,13 @@ public class MIsauAdninFrame extends javax.swing.JFrame {
        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MIsauAdninFrame().setVisible(true);
+                try {
+                    new MIsauAdninFrame().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(MIsauAdninFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(MIsauAdninFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -357,7 +362,6 @@ public class MIsauAdninFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton escuro;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -368,6 +372,7 @@ public class MIsauAdninFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JToggleButton jToggleButton4;
     private com.pedro.swing.win_button.ButtonBadges noti;
+    private javax.swing.JLabel numero;
     private javax.swing.JPanel p;
     private javax.swing.JPanel p1;
     private javax.swing.JPanel p2;
